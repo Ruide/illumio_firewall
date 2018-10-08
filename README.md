@@ -10,14 +10,11 @@ I used hashmap for O(1) query time complexity for accept_packet function.
 naive way to maximize time complexity:
 1. each memory location stands for True or False for a specific packet
 2. do some math:
-256**4 = 2*32 = 32 bit = 4294967296
-
-in/out = 1bit, tcp/udp= 1bit
-2**16 = 65536 = 16 bit
-
-if all in memory, 50 bit => 2**50 bit memory =>  2**47 Byte => 2**17TB => 2**7 PB
-
-so 2**7 PB memory if want O(1) time complexity for accept_packet
+3. 256\*\*4 = 2\*32 = 32 bit = 4294967296
+4. in/out = 1bit, tcp/udp= 1bit
+5. 2\*\*16 = 65536 = 16 bit
+6. if all in memory, 50 bit => 2\*\*50 bit memory =>  2\*\*47 Byte => 2\*\*17TB => 2\*\*7 PB
+7. so 2\*\*7 PB memory if want O(1) time complexity for accept_packet
 
 
 
@@ -47,9 +44,13 @@ Limitations of current method:
 2. there must be a way to better integrate ranges, need further thought
 
 Implementation of translate:
+
 bit 1: in/out
+
 bit 2: tcp/udp
+
 bit 3~18: port
+
 bit 19~50: ip
 
 
