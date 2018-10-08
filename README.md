@@ -5,70 +5,70 @@ I used hashmap for O(1) query time complexity for accept_packet function.
 
 # Analysis
 
-# naive way to maximize time complexity:
-# each memory location stands for True or False for a specific packet
-# do some math 
-# 256**4 = 2*32 = 32 bit = 4294967296 
-# in/out = 1bit, tcp/udp= 1bit
-# 2**16 = 65536 = 16 bit
-# if all in memory, 50 bit => 2**50 bit memory =>  2**47 Byte => 2**17TB => 2**7 PB
-# so 2**7 PB memory if want O(1) time complexity for accept_packet
+naive way to maximize time complexity:
+each memory location stands for True or False for a specific packet
+do some math 
+256**4 = 2*32 = 32 bit = 4294967296 
+in/out = 1bit, tcp/udp= 1bit
+2**16 = 65536 = 16 bit
+if all in memory, 50 bit => 2**50 bit memory =>  2**47 Byte => 2**17TB => 2**7 PB
+so 2**7 PB memory if want O(1) time complexity for accept_packet
 
-# naive way to maximize space complexity: 
-# check for each rule when receiving a packet
-# do some math for maximize space complexity
-# O(n) for space complexity
-# O(n) time complexity for accept_packet, n is num of rules
-
-
-# idea 1 Steps:
-# translate in/out tcp/ip port ip to integer
-# accept_packet a range query on a range. rules define ranges.
-# sorted array to get O(logn) with binary search for accept_packet
-# space complexity O(n)
-
-# idea 2 - current implemented one
-# if not sorted array, we could put everything in hashmap.
-# space complexity O(n)
-# for ranges we iterate through ranges and put them in hashmap.
-# have to maintain a huge hashmap but benefit is O(1) query speed for accept_packet
-
-# limit of current method
-# 1. if ranges are used a lot in rules, then could lead to super large hashmap, in extreme case, PB level.
-# 2. there must be a way to better integrate ranges, need further thought
-
-# Implementation of translate:
-# bit 1: in/out
-# bit 2: tcp/udp
-# bit 3~18: port
-# bit 19~50: ip
+naive way to maximize space complexity: 
+check for each rule when receiving a packet
+do some math for maximize space complexity
+O(n) for space complexity
+O(n) time complexity for accept_packet, n is num of rules
 
 
-# Optimization further
-# 1. check most commonly accessed rules before others to save time. (know queries better)
-# 2. create a cache for most recent checked rule range.
-# 3. look into reference for better compact datastructure. (know rules better)
-# 4. use bloom filter + hashmap + sorted array to further optimize
-# bloom filter response membership inside array with no or maybe with O(1), so can be first step
+idea 1 Steps:
+translate in/out tcp/ip port ip to integer
+accept_packet a range query on a range. rules define ranges.
+sorted array to get O(logn) with binary search for accept_packet
+space complexity O(n)
+
+idea 2 - current implemented one
+if not sorted array, we could put everything in hashmap.
+space complexity O(n)
+for ranges we iterate through ranges and put them in hashmap.
+have to maintain a huge hashmap but benefit is O(1) query speed for accept_packet
+
+limit of current method
+1. if ranges are used a lot in rules, then could lead to super large hashmap, in extreme case, PB level.
+2. there must be a way to better integrate ranges, need further thought
+
+Implementation of translate:
+bit 1: in/out
+bit 2: tcp/udp
+bit 3~18: port
+bit 19~50: ip
 
 
-# [search] packet filtering
-# Reference for optimization
-# https://en.wikipedia.org/wiki/Firewall_(computing)
-# https://www.napier.ac.uk/~/media/worktribe/output-424671/hybrid-treerule-firewall-for-high-speed-data-transmission.pdf
-# https://www.ijraset.com/fileserve.php?FID=1384
-# https://www.ics.uci.edu/~eppstein/pubs/EppMut-SODA-01.pdf
-# https://ieeexplore.ieee.org/document/7052238
-# https://www.eng.tau.ac.il/~yash/ieeei04-gem.pdf
-# https://kuscholarworks.ku.edu/bitstream/handle/1808/11462/Clark_ku_0099D_12729_DATA_1.pdf;sequence=1
-# Geometric Efficient Matching (GEM) algorithm
-# logarithmic matching time performance, easily beating the linear time required by the naive matching algorithm.
-# algorithm’s theoretical worst-case space complexity is O(n4) for a rule-base with n rules.
-# py-pf is a pure-Python module that allows you to manage OpenBSD's Packet Filter from Python scripts. 
-# Packet Filter is OpenBSD's firewalling subsystem, renowned for its performance and security and providing, among other features.
+Optimization further
+1. check most commonly accessed rules before others to save time. (know queries better)
+2. create a cache for most recent checked rule range.
+3. look into reference for better compact datastructure. (know rules better)
+4. use bloom filter + hashmap + sorted array to further optimize
+bloom filter response membership inside array with no or maybe with O(1), so can be first step
 
 
-My rank of interested team:
+[search] packet filtering
+Reference for optimization
+https://en.wikipedia.org/wiki/Firewall_(computing)
+https://www.napier.ac.uk/~/media/worktribe/output-424671/hybrid-treerule-firewall-for-high-speed-data-transmission.pdf
+https://www.ijraset.com/fileserve.php?FID=1384
+https://www.ics.uci.edu/~eppstein/pubs/EppMut-SODA-01.pdf
+https://ieeexplore.ieee.org/document/7052238
+https://www.eng.tau.ac.il/~yash/ieeei04-gem.pdf
+https://kuscholarworks.ku.edu/bitstream/handle/1808/11462/Clark_ku_0099D_12729_DATA_1.pdf;sequence=1
+Geometric Efficient Matching (GEM) algorithm
+logarithmic matching time performance, easily beating the linear time required by the naive matching algorithm.
+algorithm’s theoretical worst-case space complexity is O(n4) for a rule-base with n rules.
+py-pf is a pure-Python module that allows you to manage OpenBSD's Packet Filter from Python scripts. 
+Packet Filter is OpenBSD's firewalling subsystem, renowned for its performance and security and providing, among other features.
+
+
+# My rank of interested team:
 1. Platform Team
 2. Policy Team
 3. Data Team
